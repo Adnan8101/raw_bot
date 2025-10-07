@@ -1,7 +1,7 @@
 import { ButtonInteraction, EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, ChannelType, PermissionFlagsBits, MessageFlags } from 'discord.js';
 import { prisma } from '../utils/prisma';
 import { generateSessionToken } from '../utils/token';
-import { EMBED_COLORS, EMOJIS } from '../config/constants';
+import { EMBED_COLORS } from '../config/constants';
 import { TICKET_CATEGORY_NAME, STAFF_ROLE_NAMES, WEBSITE_URL } from '../config/config';
 
 export async function handleButtonInteraction(interaction: ButtonInteraction) {
@@ -156,12 +156,12 @@ async function handleStartEventSetup(interaction: ButtonInteraction) {
     // Send ticket intro message
     const welcomeEmbed = new EmbedBuilder()
       .setColor(EMBED_COLORS.PRIMARY)
-      .setTitle(`${EMOJIS.MEMO} Welcome, ${interaction.user.username}!`)
+      .setTitle(`Welcome, ${interaction.user.username}`)
       .setDescription(
         `Thank you for your interest in **Raw Studio**!\n\n` +
-        `${EMOJIS.PACKAGE} Click the button below to view our event packages on the website.\n` +
+        `Click the button below to view our event packages on the website.\n` +
         `Your Discord session will automatically link with the web session.\n\n` +
-        `${EMOJIS.INFO} **What happens next?**\n` +
+        `**What happens next?**\n` +
         `1. Browse our packages\n` +
         `2. Select your preferred package\n` +
         `3. Fill in event details\n` +
@@ -174,8 +174,7 @@ async function handleStartEventSetup(interaction: ButtonInteraction) {
     const button = new ButtonBuilder()
       .setCustomId('view_packages')
       .setLabel('View Packages')
-      .setStyle(ButtonStyle.Primary)
-      .setEmoji(EMOJIS.WEB);
+      .setStyle(ButtonStyle.Primary);
 
     const row = new ActionRowBuilder<ButtonBuilder>().addComponents(button);
 
@@ -192,7 +191,7 @@ async function handleStartEventSetup(interaction: ButtonInteraction) {
     });
 
     await interaction.editReply(
-      `${EMOJIS.SUCCESS} Your ticket has been created: ${ticketChannel}\n` +
+      `Your ticket has been created: ${ticketChannel}\n` +
       `Please check the channel to continue!`
     );
 
@@ -275,10 +274,10 @@ async function handleViewPackages(interaction: ButtonInteraction) {
       });
     }
 
-    const packageUrl = `${process.env.WEBSITE_URL}/packages?token=${sessionToken.token}`;
+    const packageUrl = `${WEBSITE_URL}/packages?token=${sessionToken.token}`;
     await interaction.editReply(
-      `${EMOJIS.WEB} **Click here to view packages:**\n${packageUrl}\n\n` +
-      `${EMOJIS.INFO} This link is valid for 1 hour and is unique to you.`
+      `**Click here to view packages:**\n${packageUrl}\n\n` +
+      `This link is valid for 1 hour and is unique to you.`
     );
 
   } catch (error: any) {

@@ -100,16 +100,16 @@ async function sendReminder(ticket: any) {
 
     const embed = new EmbedBuilder()
       .setColor(reminderNumber === MAX_REMINDERS ? '#FF0000' : '#FFA500')
-      .setTitle(`${EMOJIS.WARNING} Reminder: Complete Your Package Selection`)
+      .setTitle('Reminder: Complete Your Package Selection')
       .setDescription(
         `Hi <@${ticket.discordUserId}>!\n\n` +
         `We noticed you haven't completed your package selection yet.\n\n` +
-        `${EMOJIS.INFO} **Important:**\n` +
+        `**Important:**\n` +
         `• This ticket will be automatically deleted in **${hoursRemaining} hours** if no package is selected\n` +
         `• Click the button below to view our packages and complete your selection\n` +
         `• We've generated a fresh session link for you\n\n` +
         (reminderNumber === MAX_REMINDERS
-          ? `⚠️ **This is your final reminder!** After this, the ticket will be closed automatically.\n\n`
+          ? `**This is your final reminder!** After this, the ticket will be closed automatically.\n\n`
           : '') +
         `Need help? Just ask here and our team will assist you!`
       )
@@ -119,8 +119,7 @@ async function sendReminder(ticket: any) {
     const button = new ButtonBuilder()
       .setLabel('View Packages & Complete Selection')
       .setStyle(ButtonStyle.Link)
-      .setURL(`${WEBSITE_URL}/packages?token=${sessionToken}`)
-      .setEmoji(EMOJIS.PACKAGE);
+      .setURL(`${WEBSITE_URL}/packages?token=${sessionToken}`);
 
     const row = new ActionRowBuilder<ButtonBuilder>().addComponents(button);
 
@@ -157,7 +156,7 @@ async function deleteInactiveTicket(ticket: any) {
       // Send final message before deletion
       const embed = new EmbedBuilder()
         .setColor('#FF0000')
-        .setTitle(`${EMOJIS.ERROR} Ticket Auto-Closed`)
+        .setTitle('Ticket Auto-Closed')
         .setDescription(
           `This ticket has been automatically closed due to inactivity.\n\n` +
           `**Reason:** No package selection within 24 hours\n\n` +
