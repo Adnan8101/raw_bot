@@ -1,0 +1,301 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model Game {
+  id              String            @id
+  name            String            @unique
+  displayName     String
+  description     String?
+  isEnabled       Boolean           @default(false)
+  totalChances    Int               @default(5)
+  settings        String?
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime
+  GameSession     GameSession[]
+  GameWinner      GameWinner[]
+  WordRushSession WordRushSession[]
+  WordRushWinner  WordRushWinner[]
+}
+
+model GameSession {
+  id             String    @id
+  gameId         String
+  username       String
+  ipAddress      String
+  targetNumber   Int
+  currentChances Int
+  hintRange      String
+  isActive       Boolean   @default(true)
+  isCompleted    Boolean   @default(false)
+  startedAt      DateTime  @default(now())
+  endedAt        DateTime?
+  Game           Game      @relation(fields: [gameId], references: [id], onDelete: Cascade)
+
+  @@index([gameId, isActive])
+  @@index([gameId, username, ipAddress])
+  @@index([ipAddress, isActive])
+  @@index([isCompleted, gameId])
+  @@index([startedAt])
+  @@index([username, isActive])
+}
+
+model GameWinner {
+  id             String   @id
+  gameId         String
+  sessionId      String
+  username       String
+  ipAddress      String
+  completionTime Int
+  createdAt      DateTime @default(now())
+  Game           Game     @relation(fields: [gameId], references: [id], onDelete: Cascade)
+
+  @@index([createdAt])
+  @@index([gameId, completionTime])
+  @@index([username])
+}
+
+model WordRushSession {
+  id             String    @id
+  gameId         String
+  username       String
+  ipAddress      String
+  letterSet      String
+  validWords     String
+  foundWords     String
+  isActive       Boolean   @default(true)
+  isCompleted    Boolean   @default(false)
+  startedAt      DateTime  @default(now())
+  completedAt    DateTime?
+  completionTime Int?
+  setId          Int?
+  Game           Game      @relation(fields: [gameId], references: [id], onDelete: Cascade)
+
+  @@index([gameId, isActive])
+  @@index([gameId, username, ipAddress])
+  @@index([ipAddress, isActive])
+  @@index([isCompleted, gameId])
+  @@index([startedAt])
+  @@index([username, isActive])
+}
+
+model WordRushWinner {
+  id             String   @id
+  gameId         String
+  sessionId      String
+  username       String
+  ipAddress      String
+  completionTime Int
+  foundWords     String
+  createdAt      DateTime @default(now())
+  Game           Game     @relation(fields: [gameId], references: [id], onDelete: Cascade)
+
+  @@index([createdAt])
+  @@index([gameId, completionTime])
+  @@index([username])
+}
+
+model about {
+  id          String   @id
+  name        String
+  title       String
+  description String
+  image       String
+  location    String
+  socialLinks String
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime
+}
+
+model achievements {
+  id          String   @id
+  title       String
+  value       String
+  description String
+  icon        String?
+  order       Int      @default(0)
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime
+}
+
+model contacts {
+  id        String   @id
+  name      String
+  email     String
+  subject   String
+  message   String
+  status    String   @default("unread")
+  createdAt DateTime @default(now())
+  updatedAt DateTime
+}
+
+model events {
+  id               String   @id
+  name             String
+  eventDate        DateTime
+  server           String
+  serverAvatar     String?
+  host             String
+  description      String
+  bannerLinks      String?
+  removalDate      DateTime
+  isActive         Boolean  @default(true)
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime
+  serverInviteLink String?
+
+  @@index([eventDate])
+  @@index([isActive])
+  @@index([removalDate])
+}
+
+model feedback {
+  id        String   @id
+  name      String
+  email     String?
+  message   String
+  status    String   @default("unread")
+  createdAt DateTime @default(now())
+  updatedAt DateTime
+}
+
+model heroes {
+  id          String   @id
+  title       String
+  subtitle    String
+  description String
+  image       String
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime
+}
+
+model services {
+  id          String   @id
+  title       String
+  description String
+  features    String
+  icon        String?
+  order       Int      @default(0)
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime
+}
+
+model team_members {
+  id        String   @id
+  name      String?
+  username  String
+  discordId String   @unique
+  nickname  String?
+  role      String
+  hierarchy Int      @default(0)
+  image     String?
+  bio       String?
+  isActive  Boolean  @default(true)
+  joinedAt  DateTime @default(now())
+  createdAt DateTime @default(now())
+  updatedAt DateTime
+}
+
+model testimonials {
+  id         String   @id
+  authorName String
+  authorRole String?
+  serverName String?
+  message    String
+  rating     Int      @default(5)
+  isVerified Boolean  @default(true)
+  order      Int      @default(0)
+  isActive   Boolean  @default(true)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime
+}
+
+model vouches {
+  id         String   @id
+  authorName String
+  authorRole String?
+  message    String
+  rating     Int      @default(5)
+  isVerified Boolean  @default(true)
+  order      Int      @default(0)
+  isActive   Boolean  @default(true)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime
+}
+
+model discord_active_embeds {
+  id             String   @id @default(cuid())
+  embedMessageId String   @unique
+  channelId      String
+  guildId        String
+  createdBy      String
+  isActive       Boolean  @default(true)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  @@index([embedMessageId])
+  @@index([isActive])
+}
+
+model discord_tickets {
+  id                 String                       @id @default(cuid())
+  discordUserId      String
+  discordUsername    String
+  ticketChannelId    String                       @unique
+  guildId            String
+  createdFromEmbedId String?
+  welcomeMessageId   String?
+  status             String                       @default("open")
+  closedAt           DateTime?
+  createdAt          DateTime                     @default(now())
+  updatedAt          DateTime                     @updatedAt
+  lastReminderAt     DateTime?
+  reminderCount      Int                          @default(0)
+  package_selections discord_package_selections[]
+
+  @@index([discordUserId])
+  @@index([status])
+  @@index([createdAt])
+  @@index([lastReminderAt])
+}
+
+model discord_package_selections {
+  id              String          @id @default(cuid())
+  ticketId        String
+  discordUserId   String
+  packageName     String
+  eventDateTime   DateTime?
+  serverLink      String?
+  customRequests  String?
+  selectionStatus String          @default("pending")
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+  ticket          discord_tickets @relation(fields: [ticketId], references: [id], onDelete: Cascade)
+
+  @@index([ticketId])
+  @@index([discordUserId])
+}
+
+model discord_session_tokens {
+  id              String    @id @default(cuid())
+  token           String    @unique
+  discordUserId   String
+  ticketChannelId String
+  expiresAt       DateTime
+  usedAt          DateTime?
+  createdAt       DateTime  @default(now())
+
+  @@index([token])
+  @@index([discordUserId])
+  @@index([expiresAt])
+}
