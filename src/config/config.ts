@@ -14,7 +14,7 @@ export const WEBHOOK_SECRET = process.env.WEBHOOK_SECRET || 'raw-studio-webhook-
 export const WEBHOOK_PORT = parseInt(process.env.PORT || '3001');
 
 // Website URL
-export const WEBSITE_URL = process.env.WEBSITE_URL || 'https://rawstudio.vercel.app';
+export const WEBSITE_URL = process.env.WEBSITE_URL || 'https://raw-studio.vercel.app';
 
 // JWT Secret for session tokens
 export const JWT_SECRET = process.env.JWT_SECRET || 'your-jwt-secret-change-this';
