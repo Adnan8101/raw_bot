@@ -5,7 +5,7 @@ export function handleReady(client: Client) {
   
   // Set bot status
   client.user?.setPresence({
-    activities: [{ name: 'your tickets', type: ActivityType.Listening }],
+    activities: [{ name: 'to your tickets', type: ActivityType.Listening }],
     status: 'online',
   });
 }

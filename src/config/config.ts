@@ -14,7 +14,7 @@ export const WEBHOOK_SECRET = process.env.WEBHOOK_SECRET || 'raw-studio-webhook-
 export const WEBHOOK_PORT = parseInt(process.env.PORT || '3001');
 
 // Website URL
-export const WEBSITE_URL = process.env.WEBSITE_URL || 'http://localhost:3000';
+export const WEBSITE_URL = process.env.WEBSITE_URL || 'https://rawstudio.live';
 
 // JWT Secret for session tokens
 export const JWT_SECRET = process.env.JWT_SECRET || 'your-jwt-secret-change-this';
