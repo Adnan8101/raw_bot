@@ -98,7 +98,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
         },
         {
           name: 'Links',
-          value: '[Package Selection Portal](https://rawstudio.live)',
+          value: '[Package Selection Portal](https://raw-studio.vercel.app/)\n[Support Server](https://discord.gg/rawstudio)',
           inline: false,
         }
       )
