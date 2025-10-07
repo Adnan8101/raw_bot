@@ -67,7 +67,6 @@ export async function execute(interaction: ChatInputCommandInteraction) {
         {
           name: 'System Information',
           value: [
-            `Hostname: ${hostname}`,
             `Platform: ${platform}`,
             `Architecture: ${arch}`,
             `Node Version: ${nodeVersion}`,
