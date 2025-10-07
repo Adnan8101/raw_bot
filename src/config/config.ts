@@ -22,6 +22,4 @@ export const JWT_SECRET = process.env.JWT_SECRET || 'your-jwt-secret-change-this
 // Ticket Configuration
 export const TICKET_CATEGORY_NAME = '🎫 Event Tickets';
 export const STAFF_ROLE_NAMES = ['Staff', 'Admin', 'Moderator', 'Event Manager'];
-
-// Session expiry (1 hour)
 export const SESSION_EXPIRY_MS = 60 * 60 * 1000;

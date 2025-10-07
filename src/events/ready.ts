@@ -5,7 +5,7 @@ export function handleReady(client: Client) {
   
   // Set bot status
   client.user?.setPresence({
-    activities: [{ name: 'Event Packages | /send_embed', type: ActivityType.Watching }],
+    activities: [{ name: 'your tickets', type: ActivityType.Listening }],
     status: 'online',
   });
 }

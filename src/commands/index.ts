@@ -5,6 +5,8 @@ import { listActiveEmbedsCommand } from './list-active-embeds';
 import { closeTicketCommand } from './close-ticket';
 import { setupCommand } from './setup';
 import { clearSessionCommand } from './clear-session';
+import { helpCommand } from './help';
+import { botinfoCommand } from './botinfo';
 import { Command } from '../types/discord';
 
 export async function loadCommands(client: Client): Promise<Command[]> {
@@ -15,6 +17,8 @@ export async function loadCommands(client: Client): Promise<Command[]> {
     closeTicketCommand,
     setupCommand,
     clearSessionCommand,
+    helpCommand,
+    botinfoCommand,
   ];
 
   commands.forEach(command => {
