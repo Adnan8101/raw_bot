@@ -73,10 +73,28 @@ export async function execute(interaction: ChatInputCommandInteraction) {
       .setRequired(true)
       .setMaxLength(2000);
 
+    const footerInput = new TextInputBuilder()
+      .setCustomId('embed_footer')
+      .setLabel('Embed Footer (Optional)')
+      .setStyle(TextInputStyle.Short)
+      .setPlaceholder('Managed by Raw Studio by Rashika Agarwal')
+      .setRequired(false)
+      .setMaxLength(100);
+
+    const thumbnailInput = new TextInputBuilder()
+      .setCustomId('embed_thumbnail')
+      .setLabel('Embed Thumbnail URL (Optional)')
+      .setStyle(TextInputStyle.Short)
+      .setPlaceholder('https://example.com/image.png')
+      .setRequired(false)
+      .setMaxLength(500);
+
     const row1 = new ActionRowBuilder<ModalActionRowComponentBuilder>().addComponents(titleInput);
     const row2 = new ActionRowBuilder<ModalActionRowComponentBuilder>().addComponents(descriptionInput);
+    const row3 = new ActionRowBuilder<ModalActionRowComponentBuilder>().addComponents(footerInput);
+    const row4 = new ActionRowBuilder<ModalActionRowComponentBuilder>().addComponents(thumbnailInput);
 
-    modal.addComponents(row1, row2);
+    modal.addComponents(row1, row2, row3, row4);
 
     await interaction.showModal(modal);
   } catch (error) {

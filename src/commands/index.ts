@@ -7,6 +7,7 @@ import { setupCommand } from './setup';
 import { clearSessionCommand } from './clear-session';
 import { helpCommand } from './help';
 import { botinfoCommand } from './botinfo';
+import { listTokensCommand } from './list-tokens';
 import { Command } from '../types/discord';
 
 export async function loadCommands(client: Client): Promise<Command[]> {
@@ -19,6 +20,7 @@ export async function loadCommands(client: Client): Promise<Command[]> {
     clearSessionCommand,
     helpCommand,
     botinfoCommand,
+    listTokensCommand,
   ];
 
   commands.forEach(command => {

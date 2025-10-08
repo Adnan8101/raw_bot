@@ -66,6 +66,11 @@ export async function execute(interaction: ChatInputCommandInteraction) {
           name: '/botinfo',
           value: 'Display bot and system information',
           inline: false,
+        },
+        {
+          name: '/list_tokens',
+          value: 'List all active session tokens with their users',
+          inline: false,
         }
       )
       .setFooter({ text: 'All commands are admin-only' })

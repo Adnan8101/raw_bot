@@ -38,6 +38,8 @@ async function handleSetupModal(interaction: ModalSubmitInteraction) {
     // Get the values from the modal
     const title = interaction.fields.getTextInputValue('embed_title');
     const description = interaction.fields.getTextInputValue('embed_description');
+    const footer = interaction.fields.getTextInputValue('embed_footer');
+    const thumbnail = interaction.fields.getTextInputValue('embed_thumbnail');
 
     // Get the channel
     const channel = await interaction.guild?.channels.fetch(embedChannelId) as TextChannel;
@@ -52,13 +54,29 @@ async function handleSetupModal(interaction: ModalSubmitInteraction) {
       .setTitle(title)
       .setDescription(description)
       .setColor('#FF69B4')
-      .setFooter({ text: 'Managed by Raw Studio by Rashika Agarwal' })
       .setTimestamp();
+
+    // Add footer if provided
+    if (footer && footer.trim()) {
+      embed.setFooter({ text: footer.trim() });
+    } else {
+      embed.setFooter({ text: 'Managed by Raw Studio by Rashika Agarwal' });
+    }
+
+    // Add thumbnail if provided and valid URL
+    if (thumbnail && thumbnail.trim()) {
+      try {
+        new URL(thumbnail.trim()); // Validate URL
+        embed.setThumbnail(thumbnail.trim());
+      } catch (error) {
+        console.log('Invalid thumbnail URL provided, skipping thumbnail');
+      }
+    }
 
     // Create the button
     const button = new ButtonBuilder()
       .setCustomId(`start_event_setup:${openCategoryId}:${closedCategoryId}`)
-      .setLabel('🪄 Start Event Setup')
+      .setLabel('🪄 Make your event memorable')
       .setStyle(ButtonStyle.Primary);
 
     const row = new ActionRowBuilder<ButtonBuilder>().addComponents(button);
