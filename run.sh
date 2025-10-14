@@ -101,10 +101,13 @@ print_info "Building TypeScript project..."
 npm run build
 print_success "Project built successfully"
 
-# Step 7: Push database schema
+# Step 7: Push database schema (optional - comment out if DB is already up to date)
 print_info "Pushing database schema..."
-npx prisma db push
-print_success "Database schema updated"
+if npx prisma db push; then
+    print_success "Database schema updated"
+else
+    print_warning "Database push failed - continuing anyway (make sure your DB schema is up to date)"
+fi
 
 # Step 8: Create logs directory
 print_info "Creating logs directory..."

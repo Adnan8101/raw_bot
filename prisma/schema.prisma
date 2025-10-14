@@ -143,18 +143,19 @@ model events {
   eventDate        DateTime
   server           String
   serverAvatar     String?
+  serverInviteLink String?
   host             String
   description      String
-  bannerLinks      String?
+  bannerLinks      String?  // JSON array of banner links
+  youtubeLink      String?  // Optional YouTube live stream link
   removalDate      DateTime
   isActive         Boolean  @default(true)
   createdAt        DateTime @default(now())
   updatedAt        DateTime
-  serverInviteLink String?
 
   @@index([eventDate])
-  @@index([isActive])
   @@index([removalDate])
+  @@index([isActive])
 }
 
 model feedback {
@@ -298,4 +299,16 @@ model discord_session_tokens {
   @@index([token])
   @@index([discordUserId])
   @@index([expiresAt])
+}
+
+model system_connections {
+  id              String   @id
+  connectionType  String   @unique // 'discord_bot'
+  isConnected     Boolean  @default(false)
+  lastCheckedAt   DateTime @default(now())
+  connectionData  String?  // JSON data for connection info
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime
+
+  @@index([connectionType])
 }

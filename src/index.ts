@@ -64,7 +64,7 @@ async function main() {
 
     // Start webhook server
     startWebhookServer();
-    console.log(`✅ Webhook server started on port ${process.env.PORT || 3001}`);
+    console.log(`✅ Webhook server started on port ${process.env.PORT || 3002}`);
 
     // Login to Discord
     await client.login(process.env.DISCORD_BOT_TOKEN);

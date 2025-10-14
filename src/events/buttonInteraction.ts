@@ -11,6 +11,10 @@ export async function handleButtonInteraction(interaction: ButtonInteraction) {
     await handleStartEventSetup(interaction);
   } else if (customId === 'view_packages') {
     await handleViewPackages(interaction);
+  } else if (customId === 'banner_global') {
+    await handleGlobalBanner(interaction);
+  } else if (customId === 'banner_server') {
+    await handleServerBanner(interaction);
   }
 }
 
@@ -303,5 +307,90 @@ async function handleViewPackages(interaction: ButtonInteraction) {
         console.error('Could not edit reply:', editError);
       }
     }
+  }
+}
+
+async function handleGlobalBanner(interaction: ButtonInteraction) {
+  try {
+    await interaction.deferReply({ flags: MessageFlags.Ephemeral });
+
+    // Fetch the user with banner flag
+    const user = await interaction.client.users.fetch(interaction.user.id, { force: true });
+    
+    const bannerUrl = user.bannerURL({ size: 4096 });
+
+    if (!bannerUrl) {
+      await interaction.editReply('❌ You do not have a global banner set.');
+      return;
+    }
+
+    const embed = new EmbedBuilder()
+      .setTitle(`${user.username}'s Global Banner`)
+      .setImage(bannerUrl)
+      .setColor(user.accentColor || '#5865F2')
+      .setTimestamp();
+
+    await interaction.editReply({ embeds: [embed] });
+  } catch (error) {
+    console.error('Error fetching global banner:', error);
+    await interaction.editReply('❌ An error occurred while fetching your global banner.');
+  }
+}
+
+async function handleServerBanner(interaction: ButtonInteraction) {
+  try {
+    await interaction.deferReply({ flags: MessageFlags.Ephemeral });
+
+    if (!interaction.guild) {
+      await interaction.editReply('❌ This command can only be used in a server.');
+      return;
+    }
+
+    // Fetch member data via REST API to get banner information
+    try {
+      const memberData = await interaction.client.rest.get(
+        `/guilds/${interaction.guild.id}/members/${interaction.user.id}`
+      ) as any;
+
+      const guild = await interaction.client.guilds.fetch(interaction.guild.id);
+      
+      // Check for server-specific banner
+      if (memberData.banner) {
+        const bannerUrl = `https://cdn.discordapp.com/guilds/${interaction.guild.id}/users/${interaction.user.id}/banners/${memberData.banner}.${memberData.banner.startsWith('a_') ? 'gif' : 'png'}?size=4096`;
+        
+        const embed = new EmbedBuilder()
+          .setTitle(`${interaction.user.username}'s Server Banner`)
+          .setDescription(`Server: ${guild.name}`)
+          .setImage(bannerUrl)
+          .setColor('#5865F2')
+          .setTimestamp();
+
+        await interaction.editReply({ embeds: [embed] });
+        return;
+      }
+      
+      // Fallback to server avatar if no banner
+      if (memberData.avatar) {
+        const avatarUrl = `https://cdn.discordapp.com/guilds/${interaction.guild.id}/users/${interaction.user.id}/avatars/${memberData.avatar}.${memberData.avatar.startsWith('a_') ? 'gif' : 'png'}?size=4096`;
+        
+        const embed = new EmbedBuilder()
+          .setTitle(`${interaction.user.username}'s Server Avatar`)
+          .setDescription(`Server: ${guild.name}\n\n*Note: You have a server-specific avatar but no server banner set.*`)
+          .setImage(avatarUrl)
+          .setColor('#5865F2')
+          .setTimestamp();
+
+        await interaction.editReply({ embeds: [embed] });
+        return;
+      }
+      
+      await interaction.editReply('❌ You do not have a server-specific banner or avatar set in this server.');
+    } catch (apiError: any) {
+      console.error('Error fetching member from REST API:', apiError);
+      await interaction.editReply('❌ Could not fetch server member data. Please try again.');
+    }
+  } catch (error) {
+    console.error('Error fetching server banner:', error);
+    await interaction.editReply('❌ An error occurred while fetching your server banner.');
   }
 }
